@@ -1,10 +1,11 @@
 import mysql2 from 'mysql2';
+import fs from 'fs';
 
 class DatabaseHandler {
   static pool = mysql2.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    password: process.env.DB_PASS,
+    password: fs.readFileSync(process.env.DB_PASS as string, 'utf8').trim(),
     database: process.env.DB_NAME,
     supportBigNumbers: true,
     bigNumberStrings: true,
