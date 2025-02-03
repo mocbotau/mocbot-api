@@ -1,0 +1,41 @@
+services:
+  api:
+    build: ./
+    restart: unless-stopped
+    env_file:
+      - .env.local
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - .local-secrets:/secrets
+    networks:
+      - backend
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://127.0.0.1:8000/healthcheck || exit 1
+      interval: 5s
+      start_period: 2s
+      start_interval: 3s
+  mysql:
+    image: "mysql"
+    restart: unless-stopped
+    env_file:
+      - ./db/.env.local
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/data/init.sql.local:/docker-entrypoint-initdb.d/init.sql
+      - .local-secrets:/secrets
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 8
+      start_period: 0s
+volumes:
+  mysql_data:
+networks:
+  backend:

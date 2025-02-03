@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=../../infra-helm-charts/charts/generic-app/values.schema.json
+environment: "${ENVIRONMENT}"
+version: "${COMMIT_SHA}"
+deployments:
+  - name: "mocbot-api"
+    image: "${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${REPO_NAME}-${ENVIRONMENT}"
+    service:
+      port: 8000
+      targetPort: 8000
+    ingress:
+      subdomain: "${STAGING_PREFIX}api"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      DB_HOST: "service-mocbot-db"
+      DB_USER: "MOCBOT_API"
+      DB_NAME: "MOCBOT"
+      DB_PASS: "/secrets/db-password"
+    readinessProbe:
+      httpGet:
+        path: "/healthcheck"
+        port: 8000
+    secrets:
+      db-password: "${DB_PASSWORD}"
+
+statefulSets:
+  - name: "mocbot-db"
+    image: "mysql"
+    service:
+      port: 3306
+      targetPort: 3306
+    updateStrategy: "OnDelete" # To avoid unnecessary restarts, manual restarts are required
+    environment:
+      MYSQL_DATABASE: "MOCBOT"
+      MYSQL_USER: "MOCBOT_API"
+      MYSQL_PASSWORD_FILE: "/secrets/db-password"
+      MYSQL_ROOT_PASSWORD_FILE: "/secrets/db-root-password"
+    config:
+      fileVariable: "sqlInitFile"
+      fileName: "init.sql"
+      mountPath: "/docker-entrypoint-initdb.d"
+    secrets:
+      db-password: "${DB_PASSWORD}"
+      db-root-password: "${DB_ROOT_PASSWORD}"
+    readinessProbe:
+      tcpSocket:
+        port: 3306
+    volumes:
+      - name: "mocbot-api-data"
+        mountPath: "/var/lib/mysql"
+        size: "${PERSISTENCE_SIZE}"

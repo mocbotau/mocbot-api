@@ -35,7 +35,7 @@ app.get('/', (req: Request, res: Response) => {
   res.redirect('/docs');
 });
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(YAML.load('docs/api.yml'), swaggerOptions));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(YAML.load('docs/api.yaml'), swaggerOptions));
 app.get('/healthcheck', (req, res) => {
   res.send('OK!');
 });
