@@ -10,7 +10,8 @@ services:
     volumes:
       - .local-secrets:/secrets
     networks:
-      - backend
+      - api
+      - db
     ports:
       - "8000:8000"
     healthcheck:
@@ -28,7 +29,7 @@ services:
       - ./db/data/init.sql.local:/docker-entrypoint-initdb.d/init.sql
       - .local-secrets:/secrets
     networks:
-      - backend
+      - db
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
       interval: 5s
@@ -38,4 +39,5 @@ services:
 volumes:
   mysql_data:
 networks:
-  backend:
+  api:
+  db:

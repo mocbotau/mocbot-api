@@ -179,6 +179,6 @@ jobs:
           PERSISTENCE_SIZE: ${{ needs.build.outputs.environment == 'prod' && '3Gi' || '50Mi' }}
         run: |
           cat infra/values.yaml | envsubst | \
-          helm upgrade --install "$REPO_NAME" chartmuseum/generic-app --version 0.1.0 \
+          helm upgrade --install "$REPO_NAME" chartmuseum/generic-app --version 0.1.2 \
             -f - --namespace="$REPO_NAME-$ENVIRONMENT" --set-file sqlInitFile=db/data/init.sql \
             --create-namespace --atomic --timeout=1m --cleanup-on-fail
