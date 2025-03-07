@@ -15,6 +15,7 @@ import chalk from 'chalk';
 import v1Route from '@routes/v1';
 
 // Init
+console.log("yippee");
 const app = express();
 app.use(express.json());
 app.use(cors());
