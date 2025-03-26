@@ -169,7 +169,7 @@ jobs:
       - name: Deploy application to ${{ needs.build.outputs.environment }}
         env:
           ENVIRONMENT: ${{ needs.build.outputs.environment }}
-          STAGING_PREFIX: ${{ needs.build.outputs.environment == 'staging' && 'staging.' || '' }}
+          STAGING_PREFIX: ${{ needs.build.outputs.environment == 'staging' && 'staging-' || '' }}
           REPO_NAME: ${{ needs.build.outputs.repo-name }}
           COMMIT_SHA: ${{ needs.build.outputs.commit-sha }}
           DOCKERHUB_USERNAME: ${{ secrets.ORG_DOCKERHUB_USERNAME }}
