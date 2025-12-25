@@ -25,3 +25,7 @@ tests
 jest.config.js
 
 **/init.sql.local
+
+.dagger
+dagger.json
+helmfile.yaml.gotmpl

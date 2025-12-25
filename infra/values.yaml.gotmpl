@@ -1,14 +1,16 @@
 # yaml-language-server: $schema=../../infra-helm-charts/charts/generic-app/values.schema.json
-environment: "${ENVIRONMENT}"
-version: "${COMMIT_SHA}"
+environment: {{ .Environment.Values.environment | quote }}
+version: {{ requiredEnv "COMMIT_SHA" | quote }}
+
 deployments:
   - name: "mocbot-api"
-    image: "${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${REPO_NAME}-${ENVIRONMENT}"
+    image: "mocbotau/cloud:mocbot-api-{{ .Environment.Values.environment }}"
     service:
       port: 8000
       targetPort: 8000
     ingress:
-      subdomain: "${STAGING_PREFIX}api"
+      subdomain: "{{ .Environment.Values.stagingPrefix }}api"
+      domain: "masterofcubesau.com"
     environment:
       HOST: "0.0.0.0"
       PORT: "8000"
@@ -20,8 +22,11 @@ deployments:
       httpGet:
         path: "/healthcheck"
         port: 8000
-    secrets:
-      db-password: "${DB_PASSWORD}"
+    secretProviderClass:
+      projectId: "fbd58624-9941-4959-814b-a750b2d7bffc"
+      secrets:
+        - fileName: "db-password"
+          secretKey: "DB_PASSWORD"
 
 statefulSets:
   - name: "mocbot-db"
@@ -39,13 +44,17 @@ statefulSets:
       fileVariable: "sqlInitFile"
       fileName: "init.sql"
       mountPath: "/docker-entrypoint-initdb.d"
-    secrets:
-      db-password: "${DB_PASSWORD}"
-      db-root-password: "${DB_ROOT_PASSWORD}"
+    secretProviderClass:
+      projectId: "fbd58624-9941-4959-814b-a750b2d7bffc"
+      secrets:
+        - fileName: "db-password"
+          secretKey: "DB_PASSWORD"
+        - fileName: "db-root-password"
+          secretKey: "DB_ROOT_PASSWORD"
     readinessProbe:
       tcpSocket:
         port: 3306
     volumes:
       - name: "mocbot-api-data"
         mountPath: "/var/lib/mysql"
-        size: "${PERSISTENCE_SIZE}"
+        size: {{ .Environment.Values.volumeSize | quote }}
