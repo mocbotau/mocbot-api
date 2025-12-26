@@ -11,8 +11,6 @@ const (
 )
 
 type MocbotApi struct {
-	// +private
-	RepoName string
 	// Source code directory
 	// +private
 	Source *dagger.Directory
@@ -21,7 +19,6 @@ type MocbotApi struct {
 }
 
 func New(
-	repoName string,
 	// Source code directory
 	// +defaultPath="."
 	source *dagger.Directory,
@@ -29,7 +26,6 @@ func New(
 	infisicalClientSecret *dagger.Secret,
 ) *MocbotApi {
 	return &MocbotApi{
-		RepoName:              repoName,
 		Source:                source,
 		InfisicalClientSecret: infisicalClientSecret,
 	}
@@ -89,8 +85,9 @@ func (m *MocbotApi) BuildAndPush(
 	ctx context.Context,
 	// +default="staging"
 	env string,
+	repoName string,
 ) (string, error) {
-	return dag.Docker(m.Source, m.InfisicalClientSecret, m.RepoName, dagger.DockerOpts{
+	return dag.Docker(m.Source, m.InfisicalClientSecret, repoName, dagger.DockerOpts{
 		Environment: env,
 	}).Build().Publish(ctx)
 }
