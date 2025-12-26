@@ -8,17 +8,20 @@ import (
 
 const (
 	nodeJSVersion = "23"
-	repoName      = "mocbot-api"
 )
 
 type MocbotApi struct {
+	// +private
+	RepoName string
 	// Source code directory
+	// +private
 	Source *dagger.Directory
 	// +private
 	InfisicalClientSecret *dagger.Secret
 }
 
 func New(
+	repoName string,
 	// Source code directory
 	// +defaultPath="."
 	source *dagger.Directory,
@@ -26,6 +29,7 @@ func New(
 	infisicalClientSecret *dagger.Secret,
 ) *MocbotApi {
 	return &MocbotApi{
+		RepoName:              repoName,
 		Source:                source,
 		InfisicalClientSecret: infisicalClientSecret,
 	}
@@ -86,7 +90,7 @@ func (m *MocbotApi) BuildAndPush(
 	// +default="staging"
 	env string,
 ) (string, error) {
-	return dag.Docker(m.Source, m.InfisicalClientSecret, repoName, dagger.DockerOpts{
+	return dag.Docker(m.Source, m.InfisicalClientSecret, m.RepoName, dagger.DockerOpts{
 		Environment: env,
 	}).Build().Publish(ctx)
 }
