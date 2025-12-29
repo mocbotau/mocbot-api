@@ -25,8 +25,7 @@ deployments:
     secretProviderClass:
       projectId: "fbd58624-9941-4959-814b-a750b2d7bffc"
       secrets:
-        - fileName: "db-password"
-          secretKey: "DB_PASSWORD"
+        - secretKey: "DB_PASSWORD"
 
 statefulSets:
   - name: "mocbot-db"
@@ -47,14 +46,13 @@ statefulSets:
     secretProviderClass:
       projectId: "fbd58624-9941-4959-814b-a750b2d7bffc"
       secrets:
-        - fileName: "db-password"
-          secretKey: "DB_PASSWORD"
-        - fileName: "db-root-password"
-          secretKey: "DB_ROOT_PASSWORD"
+        - secretKey: "DB_PASSWORD"
+        - secretKey: "DB_ROOT_PASSWORD"
     readinessProbe:
       tcpSocket:
         port: 3306
     volumes:
-      - name: "mocbot-api-data"
+      - name: "mocbot-api-data-longhorn"
+        storageClass: "longhorn"
         mountPath: "/var/lib/mysql"
         size: {{ .Environment.Values.volumeSize | quote }}

@@ -14,7 +14,7 @@ externalDocs:
   url: https://mocbot.masterofcubesau.com
 servers:
   - url: https://api.masterofcubesau.com/v1
-  - url: https://staging.api.masterofcubesau.com/v1
+  - url: https://staging-api.masterofcubesau.com/v1
   - url: http://localhost:8000/v1
 tags:
   - name: User XP
