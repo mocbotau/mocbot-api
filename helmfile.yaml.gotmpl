@@ -3,7 +3,7 @@ environments:
     values:
       - environment: staging
         stagingPrefix: "staging-"
-        volumeSize: "50Mi"
+        volumeSize: "300Mi"
   prod:
     values:
       - environment: prod
@@ -30,7 +30,7 @@ helmDefaults:
 releases:
   - name: mocbot-api
     chart: chartmuseum/generic-app
-    version: 0.3.0
+    version: 0.4.0
     namespace: mocbot-api-{{ .Environment.Values.environment }}
     values:
       - infra/values.yaml.gotmpl
