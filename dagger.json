@@ -1,24 +1,24 @@
 {
   "name": "mocbot-api",
-  "engineVersion": "v0.19.8",
+  "engineVersion": "v0.19.9",
   "sdk": {
     "source": "go"
   },
   "dependencies": [
     {
       "name": "docker",
-      "source": "https://github.com/mocbotau/infra-dagger-modules/modules/docker@v0.1.1",
-      "pin": "5018bf86297ee0511a95b643d62e2baa5c4a5834"
+      "source": "https://github.com/mocbotau/infra-dagger-modules/modules/docker@v0.2.1",
+      "pin": "d3b5d9928ca1aa7ab0199362d2d0f0e7cd6e792a"
     },
     {
       "name": "mysql",
-      "source": "https://github.com/mocbotau/infra-dagger-modules/modules/mysql@v0.1.1",
-      "pin": "5018bf86297ee0511a95b643d62e2baa5c4a5834"
+      "source": "https://github.com/mocbotau/infra-dagger-modules/modules/mysql@v0.2.1",
+      "pin": "d3b5d9928ca1aa7ab0199362d2d0f0e7cd6e792a"
     },
     {
       "name": "node-ci",
-      "source": "https://github.com/mocbotau/infra-dagger-modules/modules/node-ci@v0.1.1",
-      "pin": "5018bf86297ee0511a95b643d62e2baa5c4a5834"
+      "source": "https://github.com/mocbotau/infra-dagger-modules/modules/node-ci@v0.2.1",
+      "pin": "d3b5d9928ca1aa7ab0199362d2d0f0e7cd6e792a"
     }
   ],
   "source": ".dagger"
